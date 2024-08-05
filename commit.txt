@@ -1,0 +1,79 @@
+      <Dialog fullScreen open={open} onClose={handleClose}
+        PaperProps={{
+          component: 'form',
+          onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+            event.preventDefault();
+            const formData = new FormData(event.currentTarget);
+            const formJson = Object.fromEntries((formData as any).entries());
+            const email = formJson.email;
+            console.log(email);
+            handleClose();
+          },
+        }}
+      >
+
+
+      import * as React from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import FormUser from './FormUser';
+import { LocalStorage } from '../util/LocalStorage';
+
+interface DialogUserProps{
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  userType: string;
+  isOpen: boolean;
+  onOpen: ()=>void;
+  onClosed: ()=>void;
+}
+
+export default function DialogUser({
+  onSubmit, 
+  userType,
+  isOpen,
+}: DialogUserProps) {
+
+  const [open, setOpen] = React.useState(isOpen);
+
+
+  const handleClickOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const person = LocalStorage.getPerson;
+  person.type = userType;
+  
+  const openVeify = () : boolean => {
+      if(isOpen) return true;
+      return open;
+  }
+
+  return (
+    <React.Fragment>
+
+      <Button variant="outlined" onClick={handleClickOpen}>
+        Adicionar
+      </Button>
+
+      <Dialog fullScreen open={openVeify()} onClose={handleClose}
+        PaperProps={{
+          component: 'form',
+          onSubmit: onSubmit
+        }}
+      >
+        <DialogTitle>Formulário</DialogTitle>
+        <DialogContent>
+          <div className="mt-4">
+            <FormUser isDisabled={false} isShowPassword={true} person={person}/>
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button color='primary' type="submit">Confirma</Button>
+          <Button color='error' onClick={handleClose}>Cancelar</Button>
+        </DialogActions>
+      </Dialog>
+    </React.Fragment>
+  );
+}
