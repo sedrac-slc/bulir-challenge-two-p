@@ -9,4 +9,8 @@ export class TransactionApi extends AbstractApi{
         return await axios.get<Transaction[]>(`${this.BASE_URL}/${this.endpoint}/${id}/customer`, this.getHeaders());
     }
 
+    async provider(id: string){
+        return await axios.get<Transaction[]>(`${this.BASE_URL}/${this.endpoint}/${id}/provider`, this.getHeaders());
+    }    
+
 }

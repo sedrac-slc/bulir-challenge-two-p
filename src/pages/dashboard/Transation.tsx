@@ -23,9 +23,19 @@ export default function Transation() {
 
     const findAll = async () => {
         const customer = await LocalStorage.getItemUserType();
-        await transationApi.customer(customer.id).then(({data})=>{
-            setTransactions(data);
-        })
+        const provider = await LocalStorage.getItemUserType();
+        
+        if(isCustomer){
+            await transationApi.customer(customer.id).then(({data})=>{
+                setTransactions(data);
+            })
+        }
+
+        if(isProvider){
+            await transationApi.provider(provider.id).then(({data})=>{
+                setTransactions(data);
+            })  
+        }
     }
 
     useEffect(()=>{
